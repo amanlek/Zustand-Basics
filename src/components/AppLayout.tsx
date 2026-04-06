@@ -107,7 +107,7 @@ const AppLayout = ({ children }: Props) => {
 
           <Space>
             <Button type="primary" onClick={toggleTheme}>
-                {theme === "light" ? "Dark Mode 🌙" : "Light Mode ☀️"}
+                {theme === "light" ? "Dark Mode" : "Light Mode"}
 </Button>
 
             <Text>Welcome, User</Text>
