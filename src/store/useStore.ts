@@ -6,7 +6,6 @@ interface AppState {
     userName: string;
     increment: () => void;
   decrement: () => void;
-  // actions
   toggleTheme: () => void;
   setUserName: (name: string) => void;
 }
