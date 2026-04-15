@@ -24,7 +24,6 @@ const TodosList = () => {
         Todos
       </Title>
 
-      {/* Empty State */}
       {todos.length === 0 ? (
         <Empty description="No Todos Available" />
       ) : (
@@ -35,6 +34,7 @@ const TodosList = () => {
         </Space>
       )}
     </Card>
+    
   );
 };
 

@@ -1,6 +1,6 @@
 import api from "@/api/baseApiInstance";
 
-import type { Post, PostsResponse } from "@/types/post";
+import type { Post, PostsResponse } from "@/modules/Posts/post";
 
 const getPosts = async (): Promise<PostsResponse> => {
   const res = await api.get("/posts");

@@ -6,8 +6,10 @@ import {
   DeleteOutlined,
   EditOutlined,
 } from "@ant-design/icons";
-import type { Post } from "@/types/post";
+
+import type { Post } from "@/modules/Posts/post";
 import { useDeletePost, useUpdatePost } from "@/modules/Posts/usePosts";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -16,8 +18,11 @@ interface Props {
 }
 
 const PostCard = ({ post }: Props) => {
+  const role = useAuthStore((state) => state.user?.role);
+
   const updatePostMutation = useUpdatePost();
   const deletePostMutation = useDeletePost();
+
   return (
     <Card
       hoverable
@@ -27,12 +32,10 @@ const PostCard = ({ post }: Props) => {
       }}
       bodyStyle={{ padding: 16 }}
     >
-      {/* TITLE */}
       <Title level={5} style={{ marginBottom: 8 }}>
         {post.title}
       </Title>
 
-      {/* BODY */}
       <Paragraph
         ellipsis={{ rows: 2 }}
         style={{ color: "#555", marginBottom: 12 }}
@@ -40,14 +43,14 @@ const PostCard = ({ post }: Props) => {
         {post.body}
       </Paragraph>
 
-      {
-        <Space size={[0, 8]} wrap style={{ marginBottom: 12 }}>
-          {post.tags.map((tag) => (
-            <Tag key={tag} color="blue">
-              #{tag}
-            </Tag>
-          ))}
+      <Space size={[0, 8]} wrap style={{ marginBottom: 12 }}>
+        {(post.tags || []).map((tag) => (
+          <Tag key={tag} color="blue">
+            #{tag}
+          </Tag>
+        ))}
 
+        {role === "admin" && (
           <Button
             icon={<EditOutlined />}
             onClick={() =>
@@ -62,10 +65,9 @@ const PostCard = ({ post }: Props) => {
           >
             Update
           </Button>
-        </Space>
-      }
+        )}
+      </Space>
 
-      {/* FOOTER */}
       <div
         style={{
           display: "flex",
@@ -85,22 +87,25 @@ const PostCard = ({ post }: Props) => {
           </Text>
         </Space>
 
-        {/* Comments */}
         <Text style={{ color: "#1890ff", cursor: "pointer" }}>
           View <MessageTwoTone />
         </Text>
       </div>
 
-      <Popconfirm
-        title="Delete this post?"
-        onConfirm={() => deletePostMutation.mutate(post.id)}
-      >
-        <Button
-          danger
-          icon={<DeleteOutlined />}
-          loading={deletePostMutation.isPending}
-        />
-      </Popconfirm>
+      {role === "admin" && (
+        <div style={{ marginTop: 10 }}>
+          <Popconfirm
+            title="Delete this post?"
+            onConfirm={() => deletePostMutation.mutate(post.id)}
+          >
+            <Button
+              danger
+              icon={<DeleteOutlined />}
+              loading={deletePostMutation.isPending}
+            />
+          </Popconfirm>
+        </div>
+      )}
     </Card>
   );
 };

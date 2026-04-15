@@ -13,23 +13,16 @@ const UserDetails = () => {
   const { data: posts, isLoading: postsLoading } = usePosts(id);
   const { data: todos, isLoading: todosLoading } = useTodos(id);
 
-
   if (postsLoading || todosLoading) {
     return <Spin size="large" />;
   }
 
-  // Set global user when fetched
-
   return (
-    <Row
-      gutter={[16, 16]}
-    >
-      {/* LEFT PROFILE */}
+    <Row gutter={[16, 16]}>
       <Col xs={24} md={8}>
         <UserProfileCard user={user} />
       </Col>
 
-      {/* RIGHT CONTENT */}
       <Col xs={24} md={16}>
         <UserTabs posts={posts?.posts} todos={todos?.todos} />
       </Col>

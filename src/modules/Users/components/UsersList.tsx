@@ -1,18 +1,26 @@
-import { Card, Row, Col, Spin, Avatar, Typography, Space, Tag, Button } from "antd";
+import {
+  Card,
+  Row,
+  Col,
+  Spin,
+  Avatar,
+  Typography,
+  Space,
+  Tag,
+  Button,
+} from "antd";
 import { UserOutlined, MailOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import useUsers from "@/modules/Users/hooks/useUsers";
-import type { User } from "@/types/users";
-import { useStore } from "@/store/useStore";
-
-
+import type { User } from "@/modules/Users/users";
+import { useAppStore } from "@/store/useAppStore";
 
 const { Title, Text } = Typography;
 
 const UsersList = () => {
   const { data, isLoading } = useUsers();
   const navigate = useNavigate();
-const { count, increment, decrement } = useStore();
+  const { count, increment, decrement } = useAppStore();
 
   if (isLoading) {
     return (
@@ -68,9 +76,8 @@ const { count, increment, decrement } = useStore();
         ))}
       </Row>
       <p>{count}</p>
-<Button onClick={increment}>+</Button>
-<Button onClick={decrement}>-</Button>
-      
+      <Button onClick={increment}>+</Button>
+      <Button onClick={decrement}>-</Button>
     </>
   );
 };

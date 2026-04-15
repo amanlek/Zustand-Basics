@@ -1,5 +1,5 @@
 import { Checkbox, Card, Typography, Tag } from "antd";
-import type { Todo } from "@/types/todo";
+import type { Todo } from "@/modules/Todos/todo";
 
 const { Text } = Typography;
 
@@ -20,7 +20,6 @@ const TodoItem = ({ todo }: Props) => {
         width: "80%",
       }}
     >
-      
       <Checkbox checked={todo.completed}>
         <Text
           style={{

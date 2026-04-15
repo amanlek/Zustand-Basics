@@ -4,8 +4,8 @@ import getPosts, {
   deletePost,
   getPostsByUser,
   updatePost,
-} from "@/modules/Posts/postApi";
-import type { PostsResponse } from "@/types/post";
+} from "@/modules/Posts/api/postApi";
+import type { PostsResponse } from "@/modules/Posts/post";
 import { QUERY_KEYS } from "@/constants/queryKeys";
 
 const usePosts = (userId?: string) => {

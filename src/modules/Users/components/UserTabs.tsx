@@ -1,10 +1,11 @@
 import { Button, Result, Tabs } from "antd";
 import PostCard from "@/modules/Posts/PostCard";
-import type { Post } from "@/types/post";
-import TodoItem from "../Todos/TodoItem";
-import type { Todo } from "@/types/todo";
+import type { Post } from "@/modules/Posts/post";
+import TodoItem from "../../Todos/TodoItem";
+import type { Todo } from "@/modules/Todos/todo";
 import { PlusOutlined } from "@ant-design/icons";
 import { useAddPost } from "@/modules/Posts/usePosts";
+import { useAuthStore } from "@/store/useAuthStore";
 
 interface Props {
   posts?: Post[];
@@ -12,6 +13,7 @@ interface Props {
 }
 
 const UserTabs = ({ posts, todos }: Props) => {
+  const role = useAuthStore((state) => state.user?.role);
   const addPostMutation = useAddPost();
   return (
     <Tabs
@@ -32,21 +34,21 @@ const UserTabs = ({ posts, todos }: Props) => {
                   <PostCard key={post.id} post={post} />
                 ))
               )}
-              <Button
-                type="primary"
-                icon={<PlusOutlined />}
-                style={{ marginBottom: 16 }}
-                onClick={() =>
-                  addPostMutation.mutate({
-                    title: "New Post",
-                    body: "This is a new post",
-                    userId: 1,
-                  })
-                }
-                loading={addPostMutation.isPending}
-              >
-                Add Post
-              </Button>
+              {role === "user" && (
+                <Button
+                  type="primary"
+                  icon={<PlusOutlined />}
+                  onClick={() =>
+                    addPostMutation.mutate({
+                      title: "New Post",
+                      body: "new post body",
+                      userId: 1,
+                    })
+                  }
+                >
+                  Add Post
+                </Button>
+              )}
             </>
           ),
         },

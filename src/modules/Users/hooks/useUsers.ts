@@ -1,5 +1,5 @@
 import { getUsers } from "@/modules/Users/userApi";
-import type { UsersResponse } from "@/types/users";
+import type { UsersResponse } from "@/modules/Users/users";
 import { useQuery } from "@tanstack/react-query";
 
 const useUsers = () => {

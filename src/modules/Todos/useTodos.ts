@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { getTodo, getTodos } from "./todoApi";
-import type { TodosResponse } from "@/types/todo";
+import { getTodosByUser, getTodos } from "./todoApi";
+import type { TodosResponse } from "@/modules/Todos/todo";
 
-const useTodos = (UserId?: string ) => {
+const useTodos = (UserId?: string) => {
   return useQuery<TodosResponse>({
     queryKey: ["todos", UserId],
-    queryFn:() => (UserId ? getTodo(UserId) : getTodos()),
+    queryFn: () => (UserId ? getTodosByUser(UserId) : getTodos()),
   });
 };
 
