@@ -1,13 +1,15 @@
 import usePosts from "@/modules/Posts/usePosts";
 import type { Post } from "@/modules/Posts/post";
-import { Typography, Spin, Empty, Row, Col } from "antd";
+import { Typography, Spin, Empty, Row, Col, Button } from "antd";
 
 import PostCard from "./PostCard";
+import { useState } from "react";
 
 const { Title } = Typography;
-
 const PostsList = () => {
   const { data, isLoading } = usePosts();
+  const [count, setCount] = useState(0);
+
 
   if (isLoading) {
     return (
@@ -36,6 +38,9 @@ const PostsList = () => {
           ))}
         </Row>
       )}
+      <Button onClick={() => setCount((c) => c + 1)}>
+        Re-render Parent {count}
+      </Button>
     </div>
   );
 };

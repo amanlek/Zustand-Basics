@@ -43,15 +43,6 @@ const UserProfileCard = ({ user }: { user?: User | null}) => {
       <Button onClick={decrement}>-</Button>
 
       <br />
-      {/* <Button
-        type="primary"
-        icon={<ReloadOutlined />}
-        loading={isFetching}
-        onClick={() => refetch()}
-        style={{ marginTop: 10 }}
-      >
-        Refresh Profile
-      </Button> */}
     </Card>
   );
 };

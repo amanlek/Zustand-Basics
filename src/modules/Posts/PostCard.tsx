@@ -10,6 +10,7 @@ import {
 import type { Post } from "@/modules/Posts/post";
 import { useDeletePost, useUpdatePost } from "@/modules/Posts/usePosts";
 import { useAuthStore } from "@/store/useAuthStore";
+import React, { useCallback } from "react";
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -17,11 +18,35 @@ interface Props {
   post: Post;
 }
 
-const PostCard = ({ post }: Props) => {
+//react memo to prevent unnecessary re-renders when parent component updates but post props hasn't changed
+const PostCard = React.memo(({ post }: Props) => {   
   const role = useAuthStore((state) => state.user?.role);
 
   const updatePostMutation = useUpdatePost();
   const deletePostMutation = useDeletePost();
+
+  const handleUpdate = useCallback(() => {  
+    updatePostMutation.mutate({
+      id: post.id,
+      data: {
+        title: post.title + " (Updated)",
+      },
+    });
+  }, [updatePostMutation, post.id, post.title]);
+
+   const handleDelete = useCallback(() => {
+     deletePostMutation.mutate(post.id);
+   }, [deletePostMutation, post.id]);
+
+   console.log("Rendered card:", post.id);
+  const memoizedTags = React.useMemo(() => {
+   
+    return (post.tags || []).map((tag) => (
+      <Tag key={tag} color="blue">
+        #{tag}
+      </Tag>
+    ));
+  }, [post.tags]);
 
   return (
     <Card
@@ -43,30 +68,17 @@ const PostCard = ({ post }: Props) => {
         {post.body}
       </Paragraph>
 
-      <Space size={[0, 8]} wrap style={{ marginBottom: 12 }}>
-        {(post.tags || []).map((tag) => (
-          <Tag key={tag} color="blue">
-            #{tag}
-          </Tag>
-        ))}
+      <Space wrap>{memoizedTags}</Space>
 
         {role === "admin" && (
           <Button
             icon={<EditOutlined />}
-            onClick={() =>
-              updatePostMutation.mutate({
-                id: post.id,
-                data: {
-                  title: post.title + " (Updated)",
-                },
-              })
-            }
+            onClick={handleUpdate}
             loading={updatePostMutation.isPending}
           >
             Update
           </Button>
         )}
-      </Space>
 
       <div
         style={{
@@ -96,7 +108,7 @@ const PostCard = ({ post }: Props) => {
         <div style={{ marginTop: 10 }}>
           <Popconfirm
             title="Delete this post?"
-            onConfirm={() => deletePostMutation.mutate(post.id)}
+            onConfirm={handleDelete}
           >
             <Button
               danger
@@ -108,6 +120,8 @@ const PostCard = ({ post }: Props) => {
       )}
     </Card>
   );
-};
+});
+
+
 
 export default PostCard;

@@ -11,7 +11,7 @@ import {
 import { useAppStore } from "../store/useAppStore";
 import { Button } from "antd";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useAuthStore } from "@/store/useAuthStore";
 
 const { Header, Sider, Content } = Layout;
@@ -27,6 +27,39 @@ const AppLayout = () => {
   const { theme, toggleTheme } = useAppStore();
   const { logout, user } = useAuthStore();
   const role = user?.role;
+  const menuItems = useMemo(
+    () => [
+      {
+        key: "/",
+        icon: <UserOutlined />,
+        label: <Link to="/">Profile</Link>,
+      },
+      ...(role === "admin"
+        ? [
+            {
+              key: "/users",
+              icon: <UserOutlined />,
+              label: <Link to="/users">Users</Link>,
+            },
+          ]
+        : []),
+      {
+        key: "/posts",
+        icon: <FileTextOutlined />,
+        label: <Link to="/posts">Posts</Link>,
+      },
+      ...(role !== "user"
+        ? [
+            {
+              key: "/todos",
+              icon: <CheckSquareOutlined />,
+              label: <Link to="/todos">Todos</Link>,
+            },
+          ]
+        : []),
+    ],
+    [role],
+  );
   return (
     <Layout
       style={{
@@ -35,7 +68,6 @@ const AppLayout = () => {
         color: theme === "light" ? "#001529" : "#e2e8f0",
       }}
     >
-      {/* SIDEBAR */}
       <Sider
         collapsible
         collapsed={collapsed}
@@ -85,37 +117,7 @@ const AppLayout = () => {
             background: theme === "light" ? "#fff" : "#020617",
             color: theme === "light" ? "#001529" : "#fff",
           }}
-          items={[
-            {
-              key: "/",
-              icon: <UserOutlined />,
-              label: <Link to="/">Profile</Link>,
-            },
-            ...(role === "admin"
-              ? [
-                  {
-                    key: "/users",
-                    icon: <UserOutlined />,
-                    label: <Link to="/users">Users</Link>,
-                  },
-                ]
-              : []),
-
-            {
-              key: "/posts",
-              icon: <FileTextOutlined />,
-              label: <Link to="/posts">Posts</Link>,
-            },
-            ...(role !== "user"
-              ? [
-                  {
-                    key: "/todos",
-                    icon: <CheckSquareOutlined />,
-                    label: <Link to="/todos">Todos</Link>,
-                  },
-                ]
-              : []),
-          ]}
+          items={menuItems}
         />
       </Sider>
 
